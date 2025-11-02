@@ -1,28 +1,36 @@
-import { useState } from 'react'
+import React, { useState } from 'react';
+import Sidebar from './components/Sidebar.jsx';
+import Topbar from './components/Topbar.jsx';
+import Hero3D from './components/Hero3D.jsx';
+import ContentRouter from './components/ContentRouter.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [active, setActive] = useState('Dashboard');
+  const [newsEnabled, setNewsEnabled] = useState(true);
+  const [mode, setMode] = useState('Intraday');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-950 dark:to-indigo-950 text-slate-900 dark:text-white">
+      <div className="flex">
+        <Sidebar active={active} onSelect={setActive} />
+        <div className="flex-1 min-h-screen flex flex-col">
+          <Topbar
+            newsEnabled={newsEnabled}
+            onToggleNews={() => setNewsEnabled((v) => !v)}
+            mode={mode}
+            onChangeMode={setMode}
+          />
+
+          <main className="max-w-7xl mx-auto w-full px-4 md:px-6 py-6 space-y-6">
+            {active === 'Dashboard' && <Hero3D />}
+            <div className="grid grid-cols-1">
+              <ContentRouter section={active} newsEnabled={newsEnabled} mode={mode} />
+            </div>
+          </main>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
